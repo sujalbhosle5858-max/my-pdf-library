@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -127,7 +127,6 @@ button {
 
 </div>
 
-<!-- बॅकग्राउंडमध्ये डेटा पाठवण्यासाठी लपवलेला फॉर्म -->
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSeSLQuTsgiEZghUq6Baf9oG3B3j4gYm_W10GsbhKvjRvwnWZw/formResponse" method="POST" target="hidden_iframe" style="display:none;">
   <input type="text" name="entry.1752123307" id="gname">
@@ -142,27 +141,25 @@ function login() {
   let mobile = document.getElementById("mobile").value.trim();
   let password = document.getElementById("password").value;
 
-  if(name === "" || mobile === "" || password === "") {
-    alert("कृपया सर्व माहिती भरा!");
+  if (name === "" || mobile === "" || password === "") {
+    alert("Please fill all details!");
     return;
   }
 
-  if(!/^[0-9]{10}$/.test(mobile)) {
-    alert("कृपया अचूक १० अंकी मोबाईल नंबर टाका!");
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("Please enter a valid 10-digit mobile number!");
     return;
   }
 
-  if(password !== FIXED_PASSWORD) {
-    alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड टाका.");
+  if (password !== FIXED_PASSWORD) {
+    alert("Wrong Password! Please try again.");
     return;
   }
 
-  // गुगल फॉर्ममध्ये थेट व्हॅल्यू भरून सबमिट करणे
   document.getElementById("gname").value = name;
   document.getElementById("gmobile").value = mobile;
   document.getElementById("gform").submit();
 
-  // डॅशबोर्ड उघडणे
   document.getElementById("login").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
   document.getElementById("welcome").innerText = "Welcome, " + name + "!";
@@ -186,7 +183,7 @@ function openFolder(folder) {
   pdfList.innerHTML = "<h2>📄 PDF Files</h2>";
 
   if (!files[folder] || files[folder].length === 0) {
-    pdfList.innerHTML += "<p style='color:#94a3b8;'>या फोल्डरमध्ये अजून फाईल्स नाहीत.</p>";
+    pdfList.innerHTML += "<p style='color:#94a3b8;'>No files in this folder.</p>";
     return;
   }
 
