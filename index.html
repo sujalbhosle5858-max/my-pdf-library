@@ -172,12 +172,12 @@ function openFolder(folder) {
   files[folder].forEach(function(item) {
     let link = document.createElement("a");
     link.className = "pdf";
-    link.innerText = "📕 " + item.title;
+    link.innerText = "📕 " + item.title + " (Open / Download)";
     
-    let fileUrl = "https://sujalbhosle5858-max.github.io/my-pdf-library/" + encodeURIComponent(item.filename);
-    link.href = "https://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent(fileUrl);
-    
+    link.href = encodeURI(item.filename);
+    link.setAttribute("download", item.filename);
     link.target = "_blank";
+    
     pdfList.appendChild(link);
   });
 }
