@@ -1,35 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>My PDF Library</title>
-
 <style>
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #0f172a;
   color: white;
 }
-
 .container {
   max-width: 450px;
   margin: auto;
   padding: 25px;
 }
-
 h1 {
   text-align: center;
   color: #60a5fa;
 }
-
 input {
   width: 100%;
   padding: 14px;
@@ -38,8 +31,8 @@ input {
   border: none;
   background: #1e293b;
   color: white;
+  font-size: 16px;
 }
-
 button {
   width: 100%;
   padding: 14px;
@@ -49,19 +42,18 @@ button {
   background: #2563eb;
   color: white;
   font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
 }
-
 #dashboard {
   display: none;
 }
-
 .folders {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-top: 25px;
 }
-
 .folder {
   background: #1e293b;
   padding: 25px 10px;
@@ -71,13 +63,11 @@ button {
   cursor: pointer;
   border: 1px solid #334155;
 }
-
 .folder span {
   display: block;
   font-size: 40px;
   margin-bottom: 10px;
 }
-
 .pdf {
   display: block;
   padding: 15px;
@@ -86,144 +76,114 @@ button {
   border-radius: 10px;
   color: white;
   text-decoration: none;
+  border-left: 4px solid #38bdf8;
 }
-
 .back {
   background: #475569;
 }
-
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-<div id="login">
+  <div id="login">
+    <h1>📚 My PDF Library</h1>
+    <p style="text-align:center">Welcome! Login to access your PDFs</p>
+    <input id="name" placeholder="Enter Your Name">
+    <input id="mobile" type="tel" maxlength="10" placeholder="Enter Mobile Number">
+    <input id="password" type="password" placeholder="Enter Password">
+    <button onclick="login()">NEXT →</button>
+  </div>
 
-<h1>📚 My PDF Library</h1>
+  <div id="dashboard">
+    <h1>📂 My Folders</h1>
+    <p id="welcome" style="text-align:center; color:#38bdf8; font-weight:bold;"></p>
 
-<p style="text-align:center">
-Welcome! Login to access your PDFs
-</p>
+    <div class="folders">
+      <div class="folder" onclick="openFolder('engineering')">
+        <span>📁</span>
+        Engineering
+      </div>
+      <div class="folder" onclick="openFolder('assignment')">
+        <span>📁</span>
+        Assignments
+      </div>
+      <div class="folder" onclick="openFolder('papers')">
+        <span>📁</span>
+        Previous Papers
+      </div>
+      <div class="folder" onclick="openFolder('notes')">
+        <span>📁</span>
+        Notes
+      </div>
+    </div>
 
-<input id="name" placeholder="Enter Your Name">
+    <div id="pdfList" style="margin-top: 20px;"></div>
 
-<input id="mobile"
-type="tel"
-maxlength="10"
-placeholder="Enter Mobile Number">
-
-<input id="password"
-type="password"
-placeholder="Enter Password">
-
-<button onclick="login()">NEXT →</button>
-
-</div>
-
-<div id="dashboard">
-
-<h1>📂 My Folders</h1>
-
-<p id="welcome"></p>
-
-<div class="folders">
-
-<div class="folder" onclick="openFolder('engineering')">
-<span>📁</span>
-Engineering
-</div>
-
-<div class="folder" onclick="openFolder('assignment')">
-<span>📁</span>
-Assignments
-</div>
-
-<div class="folder" onclick="openFolder('papers')">
-<span>📁</span>
-Previous Papers
-</div>
-
-<div class="folder" onclick="openFolder('notes')">
-<span>📁</span>
-Notes
-</div>
-
-</div>
-
-<div id="pdfList"></div>
-
-<button class="back" onclick="logout()">LOGOUT</button>
-
-</div>
+    <button class="back" onclick="logout()">LOGOUT</button>
+  </div>
 
 </div>
 
 <script>
-
 function login() {
+  let name = document.getElementById("name").value.trim();
+  let mobile = document.getElementById("mobile").value.trim();
+  let password = document.getElementById("password").value;
 
-let name = document.getElementById("name").value.trim();
-let mobile = document.getElementById("mobile").value.trim();
-let password = document.getElementById("password").value;
+  if(name === "" || mobile === "" || password === "") {
+    alert("Please fill all details");
+    return;
+  }
 
-if(name === "" || mobile === "" || password === "") {
-  alert("Please fill all details");
-  return;
-}
+  if(!/^[0-9]{10}$/.test(mobile)) {
+    alert("Enter valid 10 digit mobile number");
+    return;
+  }
 
-if(!/^[0-9]{10}$/.test(mobile)) {
-  alert("Enter valid 10 digit mobile number");
-  return;
-}
-
-document.getElementById("login").style.display = "none";
-document.getElementById("dashboard").style.display = "block";
-
-document.getElementById("welcome").innerText =
-"Welcome, " + name + "!";
+  document.getElementById("login").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  document.getElementById("welcome").innerText = "Welcome, " + name + "!";
 }
 
 function openFolder(folder) {
+  let pdfList = document.getElementById("pdfList");
 
-let pdfList = document.getElementById("pdfList");
+  let files = {
+    engineering: [
+      { 
+        title: "Chemistry Unit 1 Notes 2024", 
+        url: "Chemistry%20unit%201%20notes%202024%20pattern%20by%20imp%20solution%20hub.pdf" 
+      }
+    ],
+    assignment: [],
+    papers: [],
+    notes: []
+  };
 
-let files = {
-engineering: ["Physics.pdf", "Maths.pdf", "Chemistry.pdf"],
-assignment: ["Assignment 1.pdf", "Assignment 2.pdf"],
-papers: ["Previous Paper 1.pdf", "Previous Paper 2.pdf"],
-notes: ["Notes 1.pdf", "Notes 2.pdf"]
-};
+  pdfList.innerHTML = "<h2>📄 PDF Files</h2>";
 
-pdfList.innerHTML = "<h2>📄 PDF Files</h2>";
+  if (!files[folder] || files[folder].length === 0) {
+    pdfList.innerHTML += "<p style='color:#94a3b8;'>या फोल्डरमध्ये अजून फाईल्स नाहीत.</p>";
+    return;
+  }
 
-files[folder].forEach(function(file) {
-
-let link = document.createElement("a");
-
-link.className = "pdf";
-link.innerText = "📕 " + file;
-
-// Add your actual PDF link here
-link.href = "#";
-
-link.onclick = function(event) {
-  event.preventDefault();
-  alert("PDF link upload karne ke baad open hoga");
-};
-
-pdfList.appendChild(link);
-
-});
-
+  files[folder].forEach(function(item) {
+    let link = document.createElement("a");
+    link.className = "pdf";
+    link.innerText = "📕 " + item.title;
+    link.href = item.url;
+    link.target = "_blank";
+    pdfList.appendChild(link);
+  });
 }
 
 function logout() {
-document.getElementById("dashboard").style.display = "none";
-document.getElementById("login").style.display = "block";
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("pdfList").innerHTML = "";
 }
-
 </script>
 
 </body>
