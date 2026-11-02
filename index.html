@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My PDF Library</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.container {
+  max-width: 450px;
+  margin: auto;
+  padding: 25px;
+}
+
+h1 {
+  text-align: center;
+  color: #60a5fa;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background: #1e293b;
+  color: white;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 17px;
+}
+
+#dashboard {
+  display: none;
+}
+
+.folders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.folder {
+  background: #1e293b;
+  padding: 25px 10px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 17px;
+  cursor: pointer;
+  border: 1px solid #334155;
+}
+
+.folder span {
+  display: block;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.pdf {
+  display: block;
+  padding: 15px;
+  margin: 12px 0;
+  background: #1e293b;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.back {
+  background: #475569;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="login">
+
+<h1>📚 My PDF Library</h1>
+
+<p style="text-align:center">
+Welcome! Login to access your PDFs
+</p>
+
+<input id="name" placeholder="Enter Your Name">
+
+<input id="mobile"
+type="tel"
+maxlength="10"
+placeholder="Enter Mobile Number">
+
+<input id="password"
+type="password"
+placeholder="Enter Password">
+
+<button onclick="login()">NEXT →</button>
+
+</div>
+
+<div id="dashboard">
+
+<h1>📂 My Folders</h1>
+
+<p id="welcome"></p>
+
+<div class="folders">
+
+<div class="folder" onclick="openFolder('engineering')">
+<span>📁</span>
+Engineering
+</div>
+
+<div class="folder" onclick="openFolder('assignment')">
+<span>📁</span>
+Assignments
+</div>
+
+<div class="folder" onclick="openFolder('papers')">
+<span>📁</span>
+Previous Papers
+</div>
+
+<div class="folder" onclick="openFolder('notes')">
+<span>📁</span>
+Notes
+</div>
+
+</div>
+
+<div id="pdfList"></div>
+
+<button class="back" onclick="logout()">LOGOUT</button>
+
+</div>
+
+</div>
+
+<script>
+
+function login() {
+
+let name = document.getElementById("name").value.trim();
+let mobile = document.getElementById("mobile").value.trim();
+let password = document.getElementById("password").value;
+
+if(name === "" || mobile === "" || password === "") {
+  alert("Please fill all details");
+  return;
+}
+
+if(!/^[0-9]{10}$/.test(mobile)) {
+  alert("Enter valid 10 digit mobile number");
+  return;
+}
+
+document.getElementById("login").style.display = "none";
+document.getElementById("dashboard").style.display = "block";
+
+document.getElementById("welcome").innerText =
+"Welcome, " + name + "!";
+}
+
+function openFolder(folder) {
+
+let pdfList = document.getElementById("pdfList");
+
+let files = {
+engineering: ["Physics.pdf", "Maths.pdf", "Chemistry.pdf"],
+assignment: ["Assignment 1.pdf", "Assignment 2.pdf"],
+papers: ["Previous Paper 1.pdf", "Previous Paper 2.pdf"],
+notes: ["Notes 1.pdf", "Notes 2.pdf"]
+};
+
+pdfList.innerHTML = "<h2>📄 PDF Files</h2>";
+
+files[folder].forEach(function(file) {
+
+let link = document.createElement("a");
+
+link.className = "pdf";
+link.innerText = "📕 " + file;
+
+// Add your actual PDF link here
+link.href = "#";
+
+link.onclick = function(event) {
+  event.preventDefault();
+  alert("PDF link upload karne ke baad open hoga");
+};
+
+pdfList.appendChild(link);
+
+});
+
+}
+
+function logout() {
+document.getElementById("dashboard").style.display = "none";
+document.getElementById("login").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
