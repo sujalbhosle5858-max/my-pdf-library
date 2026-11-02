@@ -94,7 +94,7 @@ button {
     <input id="name" placeholder="Enter Your Name">
     <input id="mobile" type="tel" maxlength="10" placeholder="Enter Mobile Number">
     <input id="password" type="password" placeholder="Enter Password">
-    <button onclick="login()">NEXT →</button>
+    <button id="loginBtn" onclick="login()">NEXT →</button>
   </div>
 
   <div id="dashboard">
@@ -128,21 +128,52 @@ button {
 </div>
 
 <script>
+// १. तुमचा फिक्स पासवर्ड
+const FIXED_PASSWORD = "Sun@0909";
+
+// २. गुगल फॉर्मची माहिती
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeSLQuTsgiEZghUq6Baf9oG3B3j4gYm_W10GsbhKvjRvwnWZw/formResponse";
+const ENTRY_NAME = "entry.1752123307";
+const ENTRY_MOBILE = "entry.257478073";
+
+function sendDataToGoogleSheet(name, mobile) {
+  let formData = new FormData();
+  formData.append(ENTRY_NAME, name);
+  formData.append(ENTRY_MOBILE, mobile);
+
+  fetch(FORM_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  }).catch(function(err) {
+    console.log("Sheet Logging error: ", err);
+  });
+}
+
 function login() {
   let name = document.getElementById("name").value.trim();
   let mobile = document.getElementById("mobile").value.trim();
   let password = document.getElementById("password").value;
 
   if(name === "" || mobile === "" || password === "") {
-    alert("Please fill all details");
+    alert("कृपया सर्व माहिती भरा!");
     return;
   }
 
   if(!/^[0-9]{10}$/.test(mobile)) {
-    alert("Enter valid 10 digit mobile number");
+    alert("कृपया अचूक १० अंकी मोबाईल नंबर टाका!");
     return;
   }
 
+  if(password !== FIXED_PASSWORD) {
+    alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड टाका.");
+    return;
+  }
+
+  // गुगल शीटमध्ये डेटा पाठवणे
+  sendDataToGoogleSheet(name, mobile);
+
+  // डॅशबोर्ड दाखवणे
   document.getElementById("login").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
   document.getElementById("welcome").innerText = "Welcome, " + name + "!";
@@ -184,6 +215,7 @@ function logout() {
   document.getElementById("dashboard").style.display = "none";
   document.getElementById("login").style.display = "block";
   document.getElementById("pdfList").innerHTML = "";
+  document.getElementById("password").value = "";
 }
 </script>
 
