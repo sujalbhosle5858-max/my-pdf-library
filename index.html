@@ -128,4 +128,66 @@ button {
 
 <script>
 function login() {
-  let name = document.getElementById("
+  let name = document.getElementById("name").value.trim();
+  let mobile = document.getElementById("mobile").value.trim();
+  let password = document.getElementById("password").value;
+
+  if(name === "" || mobile === "" || password === "") {
+    alert("Please fill all details");
+    return;
+  }
+
+  if(!/^[0-9]{10}$/.test(mobile)) {
+    alert("Enter valid 10 digit mobile number");
+    return;
+  }
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  document.getElementById("welcome").innerText = "Welcome, " + name + "!";
+}
+
+function openFolder(folder) {
+  let pdfList = document.getElementById("pdfList");
+
+  let files = {
+    engineering: [
+      { 
+        title: "Chemistry Unit 1 Notes 2024", 
+        filename: "Chemistry unit 1 notes 2024 pattern by imp solution hub.pdf" 
+      }
+    ],
+    assignment: [],
+    papers: [],
+    notes: []
+  };
+
+  pdfList.innerHTML = "<h2>📄 PDF Files</h2>";
+
+  if (!files[folder] || files[folder].length === 0) {
+    pdfList.innerHTML += "<p style='color:#94a3b8;'>या फोल्डरमध्ये अजून फाईल्स नाहीत.</p>";
+    return;
+  }
+
+  files[folder].forEach(function(item) {
+    let link = document.createElement("a");
+    link.className = "pdf";
+    link.innerText = "📕 " + item.title;
+    
+    let fileUrl = "https://sujalbhosle5858-max.github.io/my-pdf-library/" + encodeURIComponent(item.filename);
+    link.href = "https://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent(fileUrl);
+    
+    link.target = "_blank";
+    pdfList.appendChild(link);
+  });
+}
+
+function logout() {
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("pdfList").innerHTML = "";
+}
+</script>
+
+</body>
+</html>
