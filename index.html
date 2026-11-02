@@ -94,7 +94,7 @@ button {
     <input id="name" placeholder="Enter Your Name">
     <input id="mobile" type="tel" maxlength="10" placeholder="Enter Mobile Number">
     <input id="password" type="password" placeholder="Enter Password">
-    <button id="loginBtn" onclick="login()">NEXT →</button>
+    <button onclick="login()">NEXT →</button>
   </div>
 
   <div id="dashboard">
@@ -127,28 +127,15 @@ button {
 
 </div>
 
+<!-- बॅकग्राउंडमध्ये डेटा पाठवण्यासाठी लपवलेला फॉर्म -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+<form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSeSLQuTsgiEZghUq6Baf9oG3B3j4gYm_W10GsbhKvjRvwnWZw/formResponse" method="POST" target="hidden_iframe" style="display:none;">
+  <input type="text" name="entry.1752123307" id="gname">
+  <input type="text" name="entry.257478073" id="gmobile">
+</form>
+
 <script>
-// १. तुमचा फिक्स पासवर्ड
 const FIXED_PASSWORD = "Sun@0909";
-
-// २. गुगल फॉर्मची माहिती
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeSLQuTsgiEZghUq6Baf9oG3B3j4gYm_W10GsbhKvjRvwnWZw/formResponse";
-const ENTRY_NAME = "entry.1752123307";
-const ENTRY_MOBILE = "entry.257478073";
-
-function sendDataToGoogleSheet(name, mobile) {
-  let formData = new FormData();
-  formData.append(ENTRY_NAME, name);
-  formData.append(ENTRY_MOBILE, mobile);
-
-  fetch(FORM_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  }).catch(function(err) {
-    console.log("Sheet Logging error: ", err);
-  });
-}
 
 function login() {
   let name = document.getElementById("name").value.trim();
@@ -170,10 +157,12 @@ function login() {
     return;
   }
 
-  // गुगल शीटमध्ये डेटा पाठवणे
-  sendDataToGoogleSheet(name, mobile);
+  // गुगल फॉर्ममध्ये थेट व्हॅल्यू भरून सबमिट करणे
+  document.getElementById("gname").value = name;
+  document.getElementById("gmobile").value = mobile;
+  document.getElementById("gform").submit();
 
-  // डॅशबोर्ड दाखवणे
+  // डॅशबोर्ड उघडणे
   document.getElementById("login").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
   document.getElementById("welcome").innerText = "Welcome, " + name + "!";
